@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/producto")
 public class ProductoController {
 

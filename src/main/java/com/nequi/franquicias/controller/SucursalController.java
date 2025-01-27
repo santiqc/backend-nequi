@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/sucursal")
 public class SucursalController {
 
