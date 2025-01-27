@@ -1,9 +1,14 @@
-FROM openjdk:17
+FROM eclipse-temurin:17-jdk AS builder
 
 WORKDIR /app
 
-COPY nequi-0.0.1-SNAPSHOT.jar .
+COPY . .
 
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:17-jre
+
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
 
-CMD ["java", "-jar", "nequi-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "app.jar"]
