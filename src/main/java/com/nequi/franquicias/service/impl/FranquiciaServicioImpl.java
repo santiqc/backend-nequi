@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -96,5 +97,17 @@ public class FranquiciaServicioImpl implements FranquiciaServicio {
                 .doOnError(error -> LOG.error("Error al actualizar el stock del producto con ID: {}", productoId, error));
     }
 
+    @Override
+    public Flux<Producto> obtenerProductosConMayorStock(Long franquiciaId) {
+        log.info("Consultando sucursales para la franquiciaId: {}", franquiciaId);
 
+        return sucursalRepositorio.findByFranquiciaId(franquiciaId)
+                .flatMap(sucursal -> {
+                    log.info("Consultando productos para la sucursalId: {}", sucursal.getId());
+                    return productoRepositorio.findBySucursalIdOrderByStockDesc(sucursal.getId());
+                })
+                .doOnError(error -> log.error("Error al consultar productos para franquiciaId {}: {}", franquiciaId, error.getMessage(), error))
+                .onErrorMap(error -> new BaseException("Error al obtener productos con mayor stock", error, HttpStatus.INTERNAL_SERVER_ERROR) {
+                });
+    }
 }

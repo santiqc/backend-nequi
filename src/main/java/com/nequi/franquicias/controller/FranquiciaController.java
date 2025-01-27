@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -53,5 +54,10 @@ public class FranquiciaController {
                     log.error("Error al actualizar el producto con ID {}: {}", productoId, ex.getMessage(), ex);
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar producto"));
                 });
+    }
+
+    @GetMapping("/franquicias/{franquiciaId}/productos/mayor-stock")
+    public Flux<Producto> obtenerProductosConMayorStock(@PathVariable Long franquiciaId) {
+        return franquiciaServicio.obtenerProductosConMayorStock(franquiciaId);
     }
 }
