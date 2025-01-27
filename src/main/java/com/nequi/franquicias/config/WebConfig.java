@@ -20,14 +20,13 @@ import io.swagger.v3.oas.models.info.License;
 import java.net.URI;
 
 @Configuration
-@EnableWebFlux
-public class WebConfig implements WebFluxConfigurer {
+public class WebConfig {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+//    }
 
 
     @Bean
