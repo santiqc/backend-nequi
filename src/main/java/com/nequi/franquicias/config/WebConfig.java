@@ -16,7 +16,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 
 import java.net.URI;
-import java.util.Arrays;
 
 @Configuration
 @EnableWebFlux
@@ -24,15 +23,16 @@ public class WebConfig implements WebFluxConfigurer {
 
     @Bean
     public CorsWebFilter corsWebFilter() {
-        CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList("*"));
-        corsConfig.setMaxAge(8000L);
-        corsConfig.addAllowedMethod("*");
-        corsConfig.addAllowedHeader("*");
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOriginPatterns(java.util.Collections.singletonList("*"));
+        config.setAllowCredentials(true);
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfig);
-
+        source.registerCorsConfiguration("/**", config);
         return new CorsWebFilter(source);
     }
 
