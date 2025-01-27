@@ -24,29 +24,21 @@ import java.util.Arrays;
 @EnableWebFlux
 public class WebConfig implements WebFluxConfigurer {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .exposedHeaders("Authorization", "Content-Type")
-                .maxAge(3600);
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/api/**")
+//                .allowedOriginPatterns("*")
+//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+//                .allowedHeaders("*")
+//                .allowCredentials(true)
+//                .maxAge(3600);
+//    }
 
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOriginPatterns(Arrays.asList("*"));
-        corsConfig.setAllowedMethods(Arrays.asList(
-                HttpMethod.GET.name(),
-                HttpMethod.POST.name(),
-                HttpMethod.PUT.name(),
-                HttpMethod.DELETE.name(),
-                HttpMethod.OPTIONS.name(),
-                HttpMethod.PATCH.name()
-        ));
+        corsConfig.setAllowedOriginPatterns(Arrays.asList("*")); // Permitir todos los orígenes
+        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         corsConfig.setAllowedHeaders(Arrays.asList("*"));
         corsConfig.setAllowCredentials(true);
         corsConfig.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
