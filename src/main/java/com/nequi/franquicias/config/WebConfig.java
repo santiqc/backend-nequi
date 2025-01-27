@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
@@ -17,16 +18,28 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 
 import java.net.URI;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebFlux
 public class WebConfig implements WebFluxConfigurer {
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .exposedHeaders("Authorization", "Content-Type")
+                .maxAge(3600);
+    }
+
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOriginPatterns(java.util.Collections.singletonList("*"));
-        corsConfig.setAllowedMethods(java.util.Arrays.asList(
+        corsConfig.setAllowedOriginPatterns(Arrays.asList("*"));
+        corsConfig.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
@@ -34,9 +47,9 @@ public class WebConfig implements WebFluxConfigurer {
                 HttpMethod.OPTIONS.name(),
                 HttpMethod.PATCH.name()
         ));
-        corsConfig.setAllowedHeaders(java.util.Collections.singletonList("*"));
+        corsConfig.setAllowedHeaders(Arrays.asList("*"));
         corsConfig.setAllowCredentials(true);
-        corsConfig.setExposedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));
+        corsConfig.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
         corsConfig.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -47,8 +60,8 @@ public class WebConfig implements WebFluxConfigurer {
     @Bean
     public RouterFunction<ServerResponse> routerFunction() {
         return RouterFunctions.route()
-                .GET("/", request ->
-                        ServerResponse.permanentRedirect(URI.create("/swagger-ui.html")).build())
+                .GET("/", request -> ServerResponse.permanentRedirect(URI.create("/swagger-ui.html")).build())
+                .GET("/swagger-ui.html", request -> ServerResponse.permanentRedirect(URI.create("/webjars/swagger-ui/index.html")).build())
                 .build();
     }
 
