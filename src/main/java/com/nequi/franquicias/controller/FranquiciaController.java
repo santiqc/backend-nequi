@@ -1,19 +1,23 @@
 package com.nequi.franquicias.controller;
 
+import com.nequi.franquicias.dto.FranquiciaDTO;
+import com.nequi.franquicias.dto.NombreNuevoDto;
+import com.nequi.franquicias.dto.SucursalDTO;
 import com.nequi.franquicias.model.Franquicia;
-import com.nequi.franquicias.model.Producto;
 import com.nequi.franquicias.model.Sucursal;
 import com.nequi.franquicias.service.FranquiciaServicio;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/v1/franquicia")
 public class FranquiciaController {
     private final FranquiciaServicio franquiciaServicio;
 
@@ -21,43 +25,42 @@ public class FranquiciaController {
         this.franquiciaServicio = franquiciaServicio;
     }
 
-    @PostMapping("/franquicias")
-    public Mono<Franquicia> crearFranquicia(@RequestBody Franquicia franquicia) {
-        return franquiciaServicio.crearFranquicia(franquicia);
-    }
-
-    @PostMapping("/franquicias/{franquiciaId}/sucursales/{sucursalId}")
-    public Mono<Sucursal> agregarSucursal(@PathVariable Long franquiciaId, @PathVariable Long sucursalId) {
-        return franquiciaServicio.agregarSucursal(franquiciaId, sucursalId);
-    }
-
-    @PostMapping("/sucursales/{sucursalId}/productos/{productoId}")
-    public Mono<Producto> agregarProducto(@PathVariable Long sucursalId, @PathVariable Long productoId) {
-        return franquiciaServicio.agregarProducto(sucursalId, productoId);
-    }
-
-    @DeleteMapping("/productos/{productoId}")
-    public Mono<ResponseEntity<String>> eliminarProducto(@PathVariable Long productoId) {
-        return franquiciaServicio.eliminarProducto(productoId)
-                .map(ResponseEntity::ok)
+    @PostMapping
+    public Mono<ResponseEntity<Franquicia>> crearFranquicia(@Valid @RequestBody FranquiciaDTO franquiciaDTO) {
+        log.info("Recibida solicitud para crear franquicia: {}", franquiciaDTO);
+        return franquiciaServicio.crearFranquicia(franquiciaDTO)
+                .map(franquicia -> ResponseEntity.status(HttpStatus.CREATED).body(franquicia))
+                .doOnSuccess(f -> log.info("Franquicia creada exitosamente"))
                 .onErrorResume(ex -> {
-                    log.error("Error al eliminar el producto con ID {}: {}", productoId, ex.getMessage(), ex);
-                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar producto"));
+                    log.error("Error al crear franquicia: {}", ex.getMessage());
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                 });
     }
 
-    @PutMapping("/productos/{productoId}/stock/{stockId}")
-    public Mono<ResponseEntity<String>> actualizarStockProducto(@PathVariable Long productoId, @PathVariable Integer stockId) {
-        return franquiciaServicio.actualizarStockProducto(productoId, stockId)
-                .map(ResponseEntity::ok)
+    @PostMapping("/{franquiciaId}/sucursales")
+    public Mono<ResponseEntity<Sucursal>> agregarSucursal(
+            @PathVariable Long franquiciaId,
+            @Valid @RequestBody SucursalDTO sucursalDTO) {
+        log.info("Recibida solicitud para agregar sucursal a franquicia ID {}: {}", franquiciaId, sucursalDTO);
+        return franquiciaServicio.agregarSucursal(franquiciaId, sucursalDTO)
+                .map(sucursal -> ResponseEntity.status(HttpStatus.CREATED).body(sucursal))
+                .doOnSuccess(s -> log.info("Sucursal agregada exitosamente"))
                 .onErrorResume(ex -> {
-                    log.error("Error al actualizar el producto con ID {}: {}", productoId, ex.getMessage(), ex);
-                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar producto"));
+                    log.error("Error al agregar sucursal: {}", ex.getMessage());
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                 });
     }
 
-    @GetMapping("/franquicias/{franquiciaId}/productos/mayor-stock")
-    public Flux<Producto> obtenerProductosConMayorStock(@PathVariable Long franquiciaId) {
-        return franquiciaServicio.obtenerProductosConMayorStock(franquiciaId);
+    @PutMapping("/{franquiciaId}/nombre")
+    public Mono<ResponseEntity<String>> actualizarNombreFranquicia(
+            @PathVariable Long franquiciaId,
+            @Valid @RequestBody NombreNuevoDto dto) {
+        return franquiciaServicio.actualizarNombreFranquicia(franquiciaId, dto)
+                .map(ResponseEntity::ok)
+                .onErrorResume(ex -> {
+                    log.error("Error al actualizar nombre de franquicia: {}", ex.getMessage());
+                    return Mono.just(ResponseEntity.internalServerError().body(ex.getMessage()));
+                });
     }
+
 }
