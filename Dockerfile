@@ -1,14 +1,5 @@
-FROM eclipse-temurin:17-jdk AS builder
-
-WORKDIR /app
-
-COPY . .
-
-RUN #./mvnw clean package -DskipTests
-
-FROM eclipse-temurin:17-jre
-
-COPY --from=builder /app/target/*.jar app.jar
+FROM openjdk:17-jdk-slim
+ARG JAR_FILE=target/nequi-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} app_nequi.jar
 EXPOSE 8080
-
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app_nequi.jar"]
