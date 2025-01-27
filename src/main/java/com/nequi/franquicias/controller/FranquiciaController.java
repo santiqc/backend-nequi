@@ -1,6 +1,7 @@
 package com.nequi.franquicias.controller;
 
 import com.nequi.franquicias.model.Franquicia;
+import com.nequi.franquicias.model.Producto;
 import com.nequi.franquicias.model.Sucursal;
 import com.nequi.franquicias.service.FranquiciaServicio;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,11 @@ public class FranquiciaController {
     @PostMapping("/franquicias/{franquiciaId}/sucursales/{sucursalId}")
     public Mono<Sucursal> agregarSucursal(@PathVariable Long franquiciaId, @PathVariable Long sucursalId) {
         return franquiciaServicio.agregarSucursal(franquiciaId, sucursalId);
+    }
+
+    @PostMapping("/sucursales/{sucursalId}/productos/{productoId}")
+    public Mono<Producto> agregarProducto(@PathVariable Long sucursalId, @PathVariable Long productoId) {
+        return franquiciaServicio.agregarProducto(sucursalId, productoId);
     }
 
 }

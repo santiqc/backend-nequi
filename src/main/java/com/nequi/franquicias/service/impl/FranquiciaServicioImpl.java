@@ -3,6 +3,7 @@ package com.nequi.franquicias.service.impl;
 import com.nequi.franquicias.exception.BaseException;
 import com.nequi.franquicias.exception.NotFoundException;
 import com.nequi.franquicias.model.Franquicia;
+import com.nequi.franquicias.model.Producto;
 import com.nequi.franquicias.model.Sucursal;
 import com.nequi.franquicias.repository.FranquiciaRepositorio;
 import com.nequi.franquicias.repository.ProductoRepositorio;
@@ -23,7 +24,7 @@ public class FranquiciaServicioImpl implements FranquiciaServicio {
     private final ProductoRepositorio productoRepositorio;
 
     private static Logger LOG = LoggerFactory.getLogger(FranquiciaServicioImpl.class);
-    
+
     public FranquiciaServicioImpl(FranquiciaRepositorio franquiciaRepositorio, SucursalRepositorio sucursalRepositorio, ProductoRepositorio productoRepositorio) {
         this.franquiciaRepositorio = franquiciaRepositorio;
         this.sucursalRepositorio = sucursalRepositorio;
@@ -53,4 +54,17 @@ public class FranquiciaServicioImpl implements FranquiciaServicio {
                     return sucursalRepositorio.save(sucursal);
                 });
     }
+
+    @Override
+    public Mono<Producto> agregarProducto(Long sucursalId, Long productoId) {
+        LOG.info("Agregando produco con ID: {} a una sucursal con ID: {}", productoId, sucursalId);
+        return productoRepositorio.findById(productoId)
+                .switchIfEmpty(Mono.error(new NotFoundException("Producto no encontrado con ID: " + productoId)))
+                .flatMap(producto -> {
+                    producto.setSucursalId(sucursalId);
+                    LOG.debug("Producto actualizado: {}", producto);
+                    return productoRepositorio.save(producto);
+                });
+    }
+
 }
