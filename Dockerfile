@@ -1,5 +1,13 @@
-FROM openjdk:17-jdk-slim
-ARG JAR_FILE=target/nequi-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app_nequi.jar
+
+FROM maven:3.8.4-openjdk-17 AS builder
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+
+FROM openjdk:17
+WORKDIR /app
+COPY --from=builder /app/target/nequi-0.0.1-SNAPSHOT.jar .
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app_nequi.jar"]
+CMD ["java", "-jar", "nequi-0.0.1-SNAPSHOT.jar"]
