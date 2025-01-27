@@ -1,5 +1,6 @@
 package com.nequi.franquicias.service;
 
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import com.nequi.franquicias.dto.ProductoDTO;
 import com.nequi.franquicias.model.Producto;
 import reactor.core.publisher.Flux;
@@ -10,4 +11,6 @@ public interface SucursalServicio {
     Mono<Producto> agregarProducto(Long sucursalId, ProductoDTO productoDTO);
 
     Flux<Producto> obtenerProductosConMayorStock(Long franquiciaId);
+
+    Mono<String> actualizarNombreSucursal(Long sucursalId, NombreNuevoDto dto);
 }

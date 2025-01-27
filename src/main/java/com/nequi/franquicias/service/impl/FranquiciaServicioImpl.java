@@ -1,6 +1,7 @@
 package com.nequi.franquicias.service.impl;
 
 import com.nequi.franquicias.dto.FranquiciaDTO;
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import com.nequi.franquicias.dto.SucursalDTO;
 import com.nequi.franquicias.exception.BaseException;
 import com.nequi.franquicias.exception.NotFoundException;
@@ -56,5 +57,18 @@ public class FranquiciaServicioImpl implements FranquiciaServicio {
                 .flatMap(sucursalRepositorio::save)
                 .doOnSuccess(sucursal -> log.info("Sucursal agregada exitosamente: {}", sucursal))
                 .doOnError(error -> log.error("Error al agregar sucursal: {}", error.getMessage()));
+    }
+
+    @Override
+    public Mono<String> actualizarNombreFranquicia(Long franquiciaId, NombreNuevoDto dto) {
+        return franquiciaRepositorio.findById(franquiciaId)
+                .switchIfEmpty(Mono.error(new NotFoundException("Franquicia no encontrada con ID: " + franquiciaId)))
+                .flatMap(franquicia -> {
+                    franquicia.setNombre(dto.getNombre());
+                    return franquiciaRepositorio.save(franquicia);
+                })
+                .map(f -> "Nombre de franquicia actualizado correctamente")
+                .doOnSuccess(result -> log.info("Nombre de franquicia {} actualizado a: {}", franquiciaId, dto.getNombre()))
+                .doOnError(error -> log.error("Error actualizando nombre de franquicia: {}", error.getMessage()));
     }
 }

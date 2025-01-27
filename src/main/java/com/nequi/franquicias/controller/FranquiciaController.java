@@ -1,6 +1,7 @@
 package com.nequi.franquicias.controller;
 
 import com.nequi.franquicias.dto.FranquiciaDTO;
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import com.nequi.franquicias.dto.SucursalDTO;
 import com.nequi.franquicias.model.Franquicia;
 import com.nequi.franquicias.model.Sucursal;
@@ -50,5 +51,16 @@ public class FranquiciaController {
                 });
     }
 
+    @PutMapping("/{franquiciaId}/nombre")
+    public Mono<ResponseEntity<String>> actualizarNombreFranquicia(
+            @PathVariable Long franquiciaId,
+            @Valid @RequestBody NombreNuevoDto dto) {
+        return franquiciaServicio.actualizarNombreFranquicia(franquiciaId, dto)
+                .map(ResponseEntity::ok)
+                .onErrorResume(ex -> {
+                    log.error("Error al actualizar nombre de franquicia: {}", ex.getMessage());
+                    return Mono.just(ResponseEntity.internalServerError().body(ex.getMessage()));
+                });
+    }
 
 }

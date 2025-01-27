@@ -2,6 +2,7 @@ package com.nequi.franquicias.service;
 
 import com.nequi.franquicias.dto.FranquiciaDTO;
 
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import com.nequi.franquicias.dto.SucursalDTO;
 import com.nequi.franquicias.model.Franquicia;
 import com.nequi.franquicias.model.Sucursal;
@@ -11,5 +12,5 @@ public interface FranquiciaServicio {
 
     Mono<Franquicia> crearFranquicia(FranquiciaDTO franquiciaDTO);
     Mono<Sucursal> agregarSucursal(Long franquiciaId, SucursalDTO sucursalDTO);
-
+    Mono<String> actualizarNombreFranquicia(Long franquiciaId, NombreNuevoDto dto);
 }

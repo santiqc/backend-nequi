@@ -1,9 +1,9 @@
 package com.nequi.franquicias.service.impl;
 
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import com.nequi.franquicias.dto.ProductoDTO;
 import com.nequi.franquicias.exception.NotFoundException;
 import com.nequi.franquicias.model.Producto;
-import com.nequi.franquicias.repository.FranquiciaRepositorio;
 import com.nequi.franquicias.repository.ProductoRepositorio;
 import com.nequi.franquicias.repository.SucursalRepositorio;
 import com.nequi.franquicias.service.SucursalServicio;
@@ -21,7 +21,8 @@ public class SucursalServicioImpl implements SucursalServicio {
     private final ProductoRepositorio productoRepositorio;
     private final FranquiciaMapper mapper;
 
-    public SucursalServicioImpl(SucursalRepositorio sucursalRepositorio, ProductoRepositorio productoRepositorio, FranquiciaMapper mapper) {;
+    public SucursalServicioImpl(SucursalRepositorio sucursalRepositorio, ProductoRepositorio productoRepositorio, FranquiciaMapper mapper) {
+        ;
         this.sucursalRepositorio = sucursalRepositorio;
         this.productoRepositorio = productoRepositorio;
         this.mapper = mapper;
@@ -48,5 +49,19 @@ public class SucursalServicioImpl implements SucursalServicio {
                 .flatMap(sucursal -> productoRepositorio.findBySucursalIdOrderByStockDesc(sucursal.getId()))
                 .doOnComplete(() -> log.info("Consulta de productos completada"))
                 .doOnError(error -> log.error("Error al consultar productos: {}", error.getMessage()));
+    }
+
+
+    @Override
+    public Mono<String> actualizarNombreSucursal(Long sucursalId, NombreNuevoDto dto) {
+        return sucursalRepositorio.findById(sucursalId)
+                .switchIfEmpty(Mono.error(new NotFoundException("Sucursal no encontrada con ID: " + sucursalId)))
+                .flatMap(sucursal -> {
+                    sucursal.setNombre(dto.getNombre());
+                    return sucursalRepositorio.save(sucursal);
+                })
+                .map(s -> "Nombre de sucursal actualizado correctamente")
+                .doOnSuccess(result -> log.info("Nombre de sucursal {} actualizado a: {}", sucursalId, dto.getNombre()))
+                .doOnError(error -> log.error("Error actualizando nombre de sucursal: {}", error.getMessage()));
     }
 }

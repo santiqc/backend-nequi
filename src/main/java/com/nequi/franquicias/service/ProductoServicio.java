@@ -1,5 +1,6 @@
 package com.nequi.franquicias.service;
 
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import reactor.core.publisher.Mono;
 
 public interface ProductoServicio {
@@ -9,5 +10,5 @@ public interface ProductoServicio {
 
     Mono<String> actualizarStockProducto(Long productoId, Integer nuevoStock);
 
-
+    Mono<String> actualizarNombreProducto(Long productoId, NombreNuevoDto dto);
 }

@@ -1,7 +1,9 @@
 package com.nequi.franquicias.controller;
 
 
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import com.nequi.franquicias.service.ProductoServicio;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,4 +50,15 @@ public class ProductoController {
                 });
     }
 
+    @PutMapping("/{productoId}/nombre")
+    public Mono<ResponseEntity<String>> actualizarNombreProducto(
+            @PathVariable Long productoId,
+            @Valid @RequestBody NombreNuevoDto dto) {
+        return productoServicio.actualizarNombreProducto(productoId, dto)
+                .map(ResponseEntity::ok)
+                .onErrorResume(ex -> {
+                    log.error("Error al actualizar nombre de producto: {}", ex.getMessage());
+                    return Mono.just(ResponseEntity.internalServerError().body(ex.getMessage()));
+                });
+    }
 }

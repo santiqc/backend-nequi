@@ -1,5 +1,6 @@
 package com.nequi.franquicias.controller;
 
+import com.nequi.franquicias.dto.NombreNuevoDto;
 import com.nequi.franquicias.dto.ProductoDTO;
 import com.nequi.franquicias.model.Producto;
 import com.nequi.franquicias.service.SucursalServicio;
@@ -46,6 +47,18 @@ public class SucursalController {
                 .onErrorResume(ex -> {
                     log.error("Error al consultar productos: {}", ex.getMessage());
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+                });
+    }
+
+    @PutMapping("/{sucursalId}/nombre")
+    public Mono<ResponseEntity<String>> actualizarNombreSucursal(
+            @PathVariable Long sucursalId,
+            @Valid @RequestBody NombreNuevoDto dto) {
+        return sucursalServicio.actualizarNombreSucursal(sucursalId, dto)
+                .map(ResponseEntity::ok)
+                .onErrorResume(ex -> {
+                    log.error("Error al actualizar nombre de sucursal: {}", ex.getMessage());
+                    return Mono.just(ResponseEntity.internalServerError().body(ex.getMessage()));
                 });
     }
 }
