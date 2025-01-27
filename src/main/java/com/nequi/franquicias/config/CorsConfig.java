@@ -15,39 +15,24 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
 
+        corsConfig.addAllowedOriginPattern("https://*");
+        corsConfig.addAllowedOriginPattern("http://localhost:*");
 
-        corsConfig.addAllowedOriginPattern("*");
+        corsConfig.addAllowedMethod("*");
 
-
-        corsConfig.addAllowedMethod(HttpMethod.GET.name());
-        corsConfig.addAllowedMethod(HttpMethod.POST.name());
-        corsConfig.addAllowedMethod(HttpMethod.PUT.name());
-        corsConfig.addAllowedMethod(HttpMethod.DELETE.name());
-        corsConfig.addAllowedMethod(HttpMethod.OPTIONS.name());
-        corsConfig.addAllowedMethod(HttpMethod.PATCH.name());
-
-
-        corsConfig.addAllowedHeader("Authorization");
-        corsConfig.addAllowedHeader("Content-Type");
-        corsConfig.addAllowedHeader("Accept");
-        corsConfig.addAllowedHeader("Origin");
-        corsConfig.addAllowedHeader("Access-Control-Request-Method");
-        corsConfig.addAllowedHeader("Access-Control-Request-Headers");
-
+        corsConfig.addAllowedHeader("*");
 
         corsConfig.addExposedHeader("Access-Control-Allow-Origin");
         corsConfig.addExposedHeader("Access-Control-Allow-Credentials");
-
+        corsConfig.addExposedHeader("Access-Control-Allow-Methods");
+        corsConfig.addExposedHeader("Access-Control-Allow-Headers");
 
         corsConfig.setAllowCredentials(true);
-
 
         corsConfig.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", corsConfig);
-        source.registerCorsConfiguration("/v3/**", corsConfig);
-        source.registerCorsConfiguration("/webjars/**", corsConfig);
+        source.registerCorsConfiguration("/**", corsConfig);
 
         return new CorsWebFilter(source);
     }
