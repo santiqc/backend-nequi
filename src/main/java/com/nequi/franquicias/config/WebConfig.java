@@ -2,6 +2,7 @@ package com.nequi.franquicias.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
@@ -23,16 +24,23 @@ public class WebConfig implements WebFluxConfigurer {
 
     @Bean
     public CorsWebFilter corsWebFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOriginPatterns(java.util.Collections.singletonList("*"));
-        config.setAllowCredentials(true);
-        config.addAllowedMethod("*");
-        config.addAllowedHeader("*");
-        config.setMaxAge(3600L);
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOriginPatterns(java.util.Collections.singletonList("*"));
+        corsConfig.setAllowedMethods(java.util.Arrays.asList(
+                HttpMethod.GET.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name(),
+                HttpMethod.OPTIONS.name(),
+                HttpMethod.PATCH.name()
+        ));
+        corsConfig.setAllowedHeaders(java.util.Collections.singletonList("*"));
+        corsConfig.setAllowCredentials(true);
+        corsConfig.setExposedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));
+        corsConfig.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", corsConfig);
         return new CorsWebFilter(source);
     }
 
