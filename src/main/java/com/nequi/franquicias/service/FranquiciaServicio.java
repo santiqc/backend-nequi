@@ -12,4 +12,8 @@ public interface FranquiciaServicio {
     Mono<Sucursal> agregarSucursal(Long franquiciaId, Long sucursalId);
 
     Mono<Producto> agregarProducto(Long sucursalId, Long productoIdLong);
+
+    Mono<String> eliminarProducto(Long productoId);
+
+    Mono<String> actualizarStockProducto(Long productoId, Integer nuevoStock);
 }

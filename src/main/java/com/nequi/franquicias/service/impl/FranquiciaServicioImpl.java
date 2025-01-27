@@ -67,4 +67,34 @@ public class FranquiciaServicioImpl implements FranquiciaServicio {
                 });
     }
 
+    @Override
+    public Mono<String> eliminarProducto(Long productoId) {
+        log.info("Iniciando eliminación del producto con ID: {}", productoId);
+
+        return productoRepositorio.findById(productoId)
+                .flatMap(producto -> {
+                    log.info("Producto encontrado: {}", producto);
+                    return productoRepositorio.deleteById(productoId)
+                            .then(Mono.just("Producto eliminado correctamente"));
+                })
+                .switchIfEmpty(Mono.error(new NotFoundException("Producto no encontrado con ID: " + productoId)))
+                .doOnError(ex -> log.error("Error al eliminar el producto con ID {}: {}", productoId, ex.getMessage(), ex));
+    }
+
+    @Override
+    public Mono<String> actualizarStockProducto(Long productoId, Integer nuevoStock) {
+        LOG.info("Iniciando la actualización del stock para el producto con ID: {}", productoId);
+
+        return productoRepositorio.findById(productoId)
+                .switchIfEmpty(Mono.error(new NotFoundException("Producto no encontrado con ID: " + productoId)))
+                .flatMap(producto -> {
+                    producto.setStock(nuevoStock);
+                    LOG.info("Producto actualizado: {} con nuevo stock: {}", producto, nuevoStock);
+                    return productoRepositorio.save(producto)
+                            .then(Mono.just("Producto actualizado correctamente"));
+                })
+                .doOnError(error -> LOG.error("Error al actualizar el stock del producto con ID: {}", productoId, error));
+    }
+
+
 }
