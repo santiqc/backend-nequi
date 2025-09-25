@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "50251c4a-33b6-4bc2-b9da-cd52fc6a2ecb",
+		"name": "Backen-nequi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37262578"
+	},
+	"item": [
+		{
+			"name": "agregarFranquicia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"Franquicia\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/franquicia",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franquicia"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actualizarNombreFranquicia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"NuevoNombreFranquicia\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/franquicia/1/nombre",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franquicia",
+						"1",
+						"nombre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agregaSucursalAUnaFranquicia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"nombreSucursal\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/franquicia/1/sucursales",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franquicia",
+						"1",
+						"sucursales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actualizaNombreSucursal",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"nuevoNombreSucursal\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/sucursal/1/nombre",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sucursal",
+						"1",
+						"nombre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agreguaProductosAUnaSucursal",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"iphone\",\n  \"stock\": 12\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/sucursal/1/productos",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sucursal",
+						"1",
+						"productos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "obtieneProductosConMayorStockPorFranquicia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/sucursal/1/productos/mayor-stock",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sucursal",
+						"1",
+						"productos",
+						"mayor-stock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actualizaElStockDeunProducto",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "12",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/producto/2/stock",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"producto",
+						"2",
+						"stock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actualizaNombreDelProducto",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"ProMax\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/producto/2/nombre",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"producto",
+						"2",
+						"nombre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "eliminaProducto",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "https://heroic-vibrancy-production.up.railway.app/api/v1/producto/2",
+					"protocol": "https",
+					"host": [
+						"heroic-vibrancy-production",
+						"up",
+						"railway",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"producto",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
