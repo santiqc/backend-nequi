@@ -11,6 +11,8 @@ import reactor.core.publisher.Mono;
 public interface FranquiciaServicio {
 
     Mono<Franquicia> crearFranquicia(FranquiciaDTO franquiciaDTO);
+
     Mono<Sucursal> agregarSucursal(Long franquiciaId, SucursalDTO sucursalDTO);
+
     Mono<String> actualizarNombreFranquicia(Long franquiciaId, NombreNuevoDto dto);
 }
