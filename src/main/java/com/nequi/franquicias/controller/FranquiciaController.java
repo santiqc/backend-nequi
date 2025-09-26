@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/franquicia")
 public class FranquiciaController {
     private final FranquiciaServicio franquiciaServicio;

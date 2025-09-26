@@ -1,20 +1,13 @@
-FROM gradle:7.6.0-jdk17 AS build
 
+FROM maven:3.8.4-openjdk-17 AS builder
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-COPY settings.gradle gradlew gradlew.bat ./
-COPY gradle gradle
 
-COPY . .
-
-RUN gradle build --no-daemon
-
-FROM openjdk:17-jdk-slim
-
+FROM openjdk:17
 WORKDIR /app
-
-COPY --from=build /app/build/libs/*.jar app.jar
-
+COPY --from=builder /app/target/nequi-0.0.1-SNAPSHOT.jar .
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "nequi-0.0.1-SNAPSHOT.jar"]
